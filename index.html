@@ -1,216 +1,195 @@
 <html>
-    <head>
-        <title>ValluvarSploit's Shodan Dorks</title>
-        <link rel="stylesheet" type="text/css" href="assets/bootstrap.css">
-        <link href="https://fonts.googleapis.com/css?family=Merienda+One" rel="stylesheet" type="text/css">
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-        <style>
-            body {
-                    background-image: url("assets/background.jpg");
-                    color:#FFF;
-                    font-size: 14pt;
-                    font-family:"Merienda One";
-                    font-weight: bold;
-                    padding: 0px;
+<head>
+    <title>ValluvarSploit's Shodan Dorks</title>
+    <link rel="stylesheet" type="text/css" href="../assets/bootstrap.css">
+    <link href="https://fonts.googleapis.com/css?family=Merienda+One" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <style>
+        body {
+            background-image: url("../assets/background.png");
+            color:#FFF;
+            font-size: 14pt;
+            font-family: 'Roboto Mono', monospace;
+            padding: 0px;
+        }
+
+        a {
+            color:#fff;
+            text-decoration:none;
+        }
+
+        a:hover {
+            color:yellow;
+        }
+
+        a.last-clicked {
+            color: green;
+        }
+
+        .center-block {
+            margin: auto;
+            display: block;
+        }
+
+        #split-container {
+            flex: 1;
+            display: flex;
+        }
+
+        #left-pane, #right-pane {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: left;
+        }
+        .mytooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .mytooltip .tooltiptext {
+            visibility: hidden;
+            width: 300px;
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 14px;
+            position: absolute;
+            z-index: 1;
+            top: 100%;
+            left: 100%;
+            margin-left: 10px;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .mytooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function shodan_it(type) {
+            const shodan_url = 'https://www.shodan.io/search?query=';
+            search_term = document.getElementById('search_term').value;
+            filter = search_term.split(":")[0] + ":";
+            target = search_term.split(":")[1];
+            let dork_url;
+
+            if (search_term === "") {
+                return;
+            }
+            
+            const dorks = {
+                1: shodan_url + filter + target + '+product:Elastic',
+                2: shodan_url + filter + target + '+product:Memcached',
+                3: shodan_url + filter + target + '+product:CouchDB',
+                4: shodan_url + filter + target + '+product:Riak',
+                5: shodan_url + filter + target + '+product:Cassandra',
+                6: shodan_url + filter + target + '+product:PostgreSQL',
+                7: shodan_url + filter + target + '+product:Mysql',
+                8: shodan_url + filter + target + '+product:MongoDB+-authentication',
+                9: shodan_url + filter + target + '+product:Docker',
+               10: shodan_url + filter + target + '+product:Kubernetes',
+               11: shodan_url + filter + target + '+http.title:rocketmq-console',
+               12: shodan_url + filter + target + '+http.favicon.hash:116323821',
+               13: shodan_url + filter + target + '+http.title:"Index+of+%2F"',
+               14: shodan_url + filter + target + '+http.title:phpinfo()',
+               15: shodan_url + filter + target + '+"X-Jenkins"+"Set-Cookie:+JSESSIONID"+http.title:"Dashboard"',
+               16: shodan_url + filter + target + '+"default+password"',
+               17: shodan_url + filter + target + '+"authentication+disabled"++"RFB+003.008"',
+               18: shodan_url + 'ssl:' + target,
+               19: shodan_url + 'ssl.cert.subject.cn:' + target,
+               20: shodan_url + 'ssl.cert.subject.cn:' + target + '+-HTTP',
+               21: shodan_url + 'ssl.cert.issuer.cn:' + target,
+               22: shodan_url + filter + target + '+http.component:AngularJS',
+               23: shodan_url + filter + target + '+"230+Anonymous+login+ok"',
+               24: shodan_url + filter + target + '+"220"+"230+Login+successful."',
+               25: shodan_url + filter + target + '+kibana+content-length:217',
+               26: shodan_url + filter + target + '+org:"Amazon"',
+               27: shodan_url + filter + target + '+html:%2Fdana-na%2F',
+               28: shodan_url + filter + target + '+"Set-Cookie:+mongo-express%3D"+"200+OK"',
+               29: shodan_url + filter + target + '+RethinkDB+"200+OK"',
+               30: shodan_url + filter + target + '+SonarQube',
+               31: shodan_url + filter + target + '+%22%5Cx03%5Cx00%5Cx00%5Cx0b%5Cx06%5Cxd0%5Cx00%5Cx00%5Cx124%5Cx00%22',
+               32: shodan_url + filter + target + '+product:HBase'
+            };
+
+            if (dorks[type]) {
+                dork_url = dorks[type];
+                window.open(dork_url)
+            } else {
+                console.error('Invalid type:', type);
+            }
+        }
+
+        function changeLinkColor(link) {
+            var lastClickedLink = document.querySelector(".last-clicked");
+
+            if (lastClickedLink) {
+            lastClickedLink.classList.remove("last-clicked");
             }
 
-            a {
-                color:#fff;
-                text-decoration:none;
-            }
+            link.classList.add("last-clicked");
+        }
+    </script>
+    
+    <div style="text-align: center;font-size: 25pt; text-shadow: 0 0 6px #ff7300, 0 0 5px #ff7300, 0 0 5px #ff7300;color: #FFF">
+        Shodan Dorks<br>
+    </div><br/>
 
-            a:hover {
-                color:#35da32;
-            }
-
-            .center-block {
-                 margin: auto;
-                 display: block;
-            }
-
-            .split {
-                height: 100%;
-                width: 50%;
-                position: fixed;
-                z-index: 1;
-                top: 20%;
-                overflow-x: hidden;
-                padding-top: 20px;
-            }
-
-            .left {
-            left: 0;
-            }
-
-            .right {
-            right: 0;
-            }
-
-        </style>
-    </head>
-    <body>
-        <script>
-            function shodan_it(type) {
-                target = document.getElementById('domain').value;
-
-                if (target === "") {
-                    return;
-                }
-                url = 'https://www.shodan.io/search?query=';
-                filter = target.split(":")[0] + ":";
-                target_value = target.split(":")[1];
-
-                switch(type) {
-                    case 1:
-                        url += filter  + target_value + '+product:Elastic';
-                        break;
-                    case 2:
-                        url += filter  + target_value + '+product:Memcached';
-                        break;
-                    case 3:
-                        url += filter  + target_value + '+product:CouchDB';
-                        break;
-                    case 4:
-                        url += filter  + target_value + '+product:Riak';
-                        break;
-                    case 5:
-                        url += filter  + target_value + '+product:Cassandra';
-                        break;
-                    case 6:
-                        url += filter  + target_value + '+product:PostgreSQL';
-                        break;
-                    case 7:
-                        url += filter  + target_value + '+product:Mysql';
-                        break;
-                    case 8:
-                        url += filter  + target_value + '+product:MongoDB+-authentication';
-                        break;
-                    case 9:
-                        url += filter  + target_value + '+product:Docker';
-                        break;
-                    case 10:
-                        url += filter  + target_value + '+product:Kubernetes';
-                        break;
-                    case 11:
-                        url += filter  + target_value + '+http.title:rocketmq-console';
-                        break;
-                    case 12:
-                        url += filter  + target_value + '+http.favicon.hash:116323821';
-                        break;
-                    case 13:
-                        url += filter  + target_value + '+http.title:"Index+of+%2F"';
-                        break;
-                    case 14:
-                        url += filter  + target_value + '+http.title:phpinfo()';
-                        break;
-                    case 15:
-                        url += filter  + target_value + '+"X-Jenkins"+"Set-Cookie:+JSESSIONID"+http.title:"Dashboard"';
-                        break;
-                    case 16:
-                        url += filter  + target_value + '+"default+password"';
-                        break;
-                    case 17:
-                        url += filter  + target_value + '+"authentication+disabled"++"RFB+003.008"';
-                        break;
-                    case 18:
-                        url += 'ssl:' + target_value;
-                        break;
-                    case 19:
-                        url += 'ssl.cert.subject.cn:' + target_value;
-                        break;
-                    case 20:
-                        url += 'ssl.cert.subject.cn:' + target_value + '+-HTTP';
-                        break;
-                    case 21:
-                        url += 'ssl.cert.issuer.cn:' + target_value;
-                        break;
-                    case 22:
-                        url += filter  + target_value + '+http.component:AngularJS';
-                        break;
-                    case 23:
-                        url += filter  + target_value + '+"230+Anonymous+login+ok"';
-                        break;
-                    case 24:
-                        url += filter  + target_value + '+"220"+"230+Login+successful."';
-                        break;
-                    case 25:
-                        url += filter  + target_value + '+kibana+content-length:217';
-                        break;
-                    case 26:
-                        url += filter  + target_value + '+org:"Amazon"';
-                        break;
-                    case 27:
-                        url += filter  + target_value + '+html:%2Fdana-na%2F';
-                        break;
-                    case 28:
-                        url += filter  + target_value + '+"Set-Cookie:+mongo-express%3D"+"200+OK"';
-                        break;
-                    case 29:
-                        url += filter  + target_value + '+RethinkDB+"200+OK"';
-                        break;
-                    case 30:
-                        url += filter  + target_value + '+SonarQube';
-                        break;
-                    case 31:
-                        url += filter  + target_value + '+%22%5Cx03%5Cx00%5Cx00%5Cx0b%5Cx06%5Cxd0%5Cx00%5Cx00%5Cx124%5Cx00%22';
-                        break;
-                    case 32:
-                        url += filter  + target_value + '+product:HBase';
-                        break;
-                }
-                window.open(url)
-            }
-
-        </script>
-        
-        <div style="font-family: Merienda one;text-align: center;font-size: 25pt; text-shadow: 0 0 6px #ff7300, 0 0 5px #ff7300, 0 0 5px #ff7300;color: #FFF">
-            Shodan Dorks<br>
-        </div><br/>
-
-        <form>
-            <input type="text" id="domain" class="form-control form-control-lg w-50 text-center center-block" placeholder='ssl:"allegion" OR org:"Schlage Lock Company LLC"' autofocus="" />
-        </form>
-         
-        <div class="split left" style="text-align: center">
+    <form>
+        <input type="text" id="search_term" class="form-control form-control-lg w-50 text-center center-block" placeholder='ssl:bugcrowd.com OR org:"Bugcrowd Inc"' autofocus="" />
+    </form>
+    
+    <div id="split-container">
+        <div id="left-pane" style="text-align: left">
             <div style="display: inline-block; text-align: left;">
-                &#128269; <a href="#" onclick="shodan_it(1)">Elastic Search Database</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(2)">Memcached Database</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(3)">Apache CouchDB Database</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(4)">Riak Database</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(5)">Apache Cassandra Database</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(6)">PostgreSQL Database</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(7)">MySQL Database</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(8)">MongoDB Database (Unauthenticated)</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(9)">Docker Container</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(10)">Kubernetes Container</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(11)">RocketMQ Console</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(12)">Springboot Servers</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(13)">Directory Listing</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(14)">phpinfo()</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(15)">Jenkins Dashboard</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(16)">Default Passwords</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(17)">VNC Servers (Authentication Disabled)</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(1); changeLinkColor(this);">Elastic Search Database</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(2); changeLinkColor(this);">Memcached Database</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(3); changeLinkColor(this);">Apache CouchDB Database</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(4); changeLinkColor(this);">Riak Database</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(5); changeLinkColor(this);">Apache Cassandra Database</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(6); changeLinkColor(this);">PostgreSQL Database</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(7); changeLinkColor(this);">MySQL Database</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(8); changeLinkColor(this);">MongoDB Database (Unauthenticated)</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(9); changeLinkColor(this);">Docker Container</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(10); changeLinkColor(this);">Kubernetes Container</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(11); changeLinkColor(this);">RocketMQ Console</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(12); changeLinkColor(this);">Springboot Servers</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(13); changeLinkColor(this);">Directory Listing</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(14); changeLinkColor(this);">phpinfo()</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(15); changeLinkColor(this);">Jenkins Dashboard</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(16); changeLinkColor(this);">Default Passwords</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(17); changeLinkColor(this);">VNC Servers (Authentication Disabled)</a><br/>
             </div>
         </div>
 
-        <div class="split right" style="text-align: center">
+        <div id="right-pane" style="text-align: left">
             <div style="display: inline-block; text-align: left;">
-                &#128269; <a href="#" onclick="shodan_it(18)">SSL Certificates</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(19)">SSL Certificate issued to *.domain.com</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(20)">SSL Certificate issued to *.domain.com (Non-HTTPS)</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(21)">SSL Certificate issued By *.domain.com</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(22)">AngularJS (BOOM XSS)</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(23)">FTP Login (Anonymous)</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(24)">FTP Login</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(25)">Kibana</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(26)">Amazon Assets</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(27)">Pulse Secure VPN exploit</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(28)">Mongo Express (MongoDB Web GUI)</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(29)">RethinkDB Database</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(30)">SonarQube</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(31)">Windows RDP</a><br/>
-                &#128269; <a href="#" onclick="shodan_it(32)">Hadoop HBase</a><br/>
-            </div>
+                &#128301; <a href="#" onclick="shodan_it(18); changeLinkColor(this);">SSL Certificates</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(19); changeLinkColor(this);">SSL Certificate issued to *.domain.com</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(20); changeLinkColor(this);">SSL Certificate issued to *.domain.com (Non-HTTPS)</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(21); changeLinkColor(this);">SSL Certificate issued By *.domain.com</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(22); changeLinkColor(this);">AngularJS (BOOM XSS)</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(23); changeLinkColor(this);">FTP Login (Anonymous)</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(24); changeLinkColor(this);">FTP Login</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(25); changeLinkColor(this);">Kibana</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(26); changeLinkColor(this);">Amazon Assets</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(27); changeLinkColor(this);">Pulse Secure VPN exploit</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(28); changeLinkColor(this);">Mongo Express (MongoDB Web GUI)</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(29); changeLinkColor(this);">RethinkDB Database</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(30); changeLinkColor(this);">SonarQube</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(31); changeLinkColor(this);">Windows RDP</a><br/>
+                &#128301; <a href="#" onclick="shodan_it(32); changeLinkColor(this);">Hadoop HBase</a><br/>
         </div>
-    </body>
+    </div>
+</body>
 </html>
